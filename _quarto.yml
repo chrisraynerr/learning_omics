@@ -1,0 +1,117 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - "interactive/olink_explore_interactive_qc_analysis.html"
+    - "Proteomics/data/*"
+
+execute:
+  freeze: auto
+
+website:
+  title: "Learning Omics"
+  description: "A Hands-On Curriculum for Computational Biology, Single-Cell Genomics & Proteomics"
+  site-url: "https://your-username.github.io/learning_omics/"
+  repo-url: "https://github.com/your-username/learning_omics"
+  repo-actions: [issue]
+  
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        href: index.md
+      - text: "Transcriptomics"
+        menu:
+          - text: "Bulk RNA-seq Guide & Reading"
+            href: BulkRNAseq/RECOMMENDED_READING.md
+          - text: "Single-Cell RNA-seq Guide & Reading"
+            href: scRNAseq/RECOMMENDED_READING.md
+      - text: "Epigenomics"
+        menu:
+          - text: "scATAC-seq Guide & Reading"
+            href: scATACseq/RECOMMENDED_READING.md
+      - text: "Proteomics"
+        menu:
+          - text: "Proteomics Curriculum Overview"
+            href: Proteomics/README.md
+          - text: "Part 1: The Proteomics Landscape (MS vs Olink vs SomaScan)"
+            href: Proteomics/01_part-1-the-proteomics-landscape-ms-vs-olink-vs-somascan.md
+          - text: "Part 3a: Olink PEA QC & Normalization"
+            href: Proteomics/05_part-3a-olink-qc-npx-normalization-and-olinkanalyze.md
+          - text: "Hands-On Workbook: Real Explore HT QC & Paired Analysis"
+            href: Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd
+          - text: "Recommended Reading & Curated Anthologies"
+            href: Proteomics/RECOMMENDED_READING.md
+      - text: "🔬 Interactive Lab"
+        href: interactive/olink_qc_lab.md
+
+  sidebar:
+    - id: proteomics-nav
+      title: "Proteomics Track"
+      style: "docked"
+      contents:
+        - text: "Overview & Index"
+          href: Proteomics/README.md
+        - section: "Foundations"
+          contents:
+            - text: "Part 1: Landscape (MS vs Olink vs SomaScan)"
+              href: Proteomics/01_part-1-the-proteomics-landscape-ms-vs-olink-vs-somascan.md
+        - section: "Track A: Discovery Mass Spectrometry"
+          contents:
+            - text: "Part 2a: Raw Spectra to Matrix (DIA-NN)"
+              href: Proteomics/02_part-2a-ms-from-raw-spectra-to-counts-diann-best-practices.md
+            - text: "Part 2b: QC & Missing Value Imputation"
+              href: Proteomics/03_part-2b-ms-data-qc-filtering-and-handling-missing-values.md
+            - text: "Part 2c: Differential Abundance (MSstats vs limma)"
+              href: Proteomics/04_part-2c-ms-differential-abundance-msstats-vs-limma.md
+        - section: "Track B: Targeted Affinity Proteomics"
+          contents:
+            - text: "Part 3a: Olink QC & OlinkAnalyze"
+              href: Proteomics/05_part-3a-olink-qc-npx-normalization-and-olinkanalyze.md
+            - text: "Workbook: Real Explore HT Paired QC & Analysis"
+              href: Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd
+            - text: "Part 3b: SomaScan .adat & ANML Normalization"
+              href: Proteomics/06_part-3b-somascan-adat-qc-anml-and-somadataio.md
+            - text: "Part 3c: Affinity DAPs & LOD Handling"
+              href: Proteomics/07_part-3c-affinity-differential-abundance-and-lod-handling.md
+        - section: "Converged Downstream"
+          contents:
+            - text: "Part 4: Publication Figures"
+              href: Proteomics/08_part-4-creating-publication-ready-figures-volcano-heatmaps-pca.md
+            - text: "Part 5: Pathways & STRING Networks"
+              href: Proteomics/09_part-5-pathway-enrichment-and-string-ppi-networks.md
+            - text: "Part 6: Co-expression Networks (WGCNA)"
+              href: Proteomics/10_part-6-protein-co-expression-networks-wgcna.md
+        - section: "Translational & Genetics"
+          contents:
+            - text: "Part 7: Cross-Platform Discordance"
+              href: Proteomics/11_part-7-cross-platform-discordance-ms-vs-olink-vs-somascan.md
+            - text: "Part 8: Plasma pQTLs & Mendelian Randomization"
+              href: Proteomics/12_part-8-plasma-pqtl-mapping-and-mendelian-randomization.md
+            - text: "Part 9: Phosphoproteomics & PTMs"
+              href: Proteomics/13_part-9-phosphoproteomics-and-ptm-site-analysis.md
+            - text: "Part 10: Integrated Proteogenomics"
+              href: Proteomics/14_part-10-integrated-proteogenomics-bulk-rnaseq-vs-proteomics.md
+            - text: "Part 11: Data Deposition (PRIDE)"
+              href: Proteomics/15_part-11-submitting-data-to-pride-and-proteomexchange.md
+        - section: "Literature & Textbooks"
+          contents:
+            - text: "Recommended Reading & Anthology"
+              href: Proteomics/RECOMMENDED_READING.md
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    code-copy: true
+    code-overflow: wrap
+    highlight-style: tango
+    smooth-scroll: true
+    link-external-icon: true
+    link-external-newwindow: true
+    fig-align: center

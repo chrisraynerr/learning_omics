@@ -1,0 +1,22 @@
+# Quarto generated folders
+_site/
+.quarto/
+
+# R session artifacts
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# Python cache
+__pycache__/
+*.pyc
+
+# macOS metadata
+.DS_Store
+
+# Large downloaded raw proteomics matrices (keep metadata)
+*.parquet
+*.npx.csv
+*.txt.gz
+!Proteomics/data/PAD000062_mapping.csv

@@ -1,0 +1,569 @@
+# How to level up Real-life bioinformatics skill: from dealing with one sample to a lot of samples
+
+- **Author:** Ming Tommy Tang
+- **Date:** Jun 5, 2024
+- **Tags:** bioinformatics, rstats, unix
+- **Source:** [https://divingintogeneticsandgenomics.com/post/real-life-bioinformatics-skill-deal-with-one-sample-to-a-lot-of-samples/](https://divingintogeneticsandgenomics.com/post/real-life-bioinformatics-skill-deal-with-one-sample-to-a-lot-of-samples/)
+
+---
+
+**To not miss a post like this, sign up for my [newsletter](https://divingintogeneticsandgenomics.ck.page/profile) to learn computational
+biology and bioinformatics.**
+
+The other day, I saw this tweet:
+
+> 
+
+Machine learning and bioinformatics tutorials these days [pic.twitter.com/0FhWWG09TB](https://t.co/0FhWWG09TB)
+
+— Ramon Massoni Badosa (@rmassonix) [May 15, 2024](https://twitter.com/rmassonix/status/1790873690004934867?ref_src=twsrc%5Etfw)
+
+Many of the bioinformatics tutorials are like that. I am not saying the tutorial
+is not good. For beginners, we need something basic first to understand it. However,
+for real-life bioinformatics problems, it is usually much more complicated and
+we did not get taught how to deal with them.
+
+In this blog post, I am going to use a real example on how to quantify scRNAseq
+data with `salmon` to demonstrate how you can level-up your bioinformatics skills in
+real life. Let’s go!
+
+In a folder, it contains all fastq files you get from sequencing your 10x genomics experiment.
+
+```
+ls 
+
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R2_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_L001_R2_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_L001_R2_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S4_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S4_L001_R2_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S5_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S5_L001_R2_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S6_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S6_L001_R2_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S7_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S7_L001_R2_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S8_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S8_L001_R2_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R2_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S10_L002_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S10_L002_R2_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S11_L002_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S11_L002_R2_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S12_L002_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S12_L002_R2_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S13_L002_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S13_L002_R2_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S14_L002_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S14_L002_R2_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S15_L002_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S15_L002_R2_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S16_L002_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S16_L002_R2_001.fastq.gz
+```
+
+If you want to follow the example, you can copy the above into a file named `files.txt`
+and do:
+
+```
+cat files.txt | xargs touch
+```
+
+It will create empty fastq.gz files with those names.
+
+In real life, you generate that file by:
+
+```
+ls -1 *fq.gz | sort > files.txt 
+```
+
+`ls -1` makes the output one file per line.
+
+Let’s take a moment and understand the fastq files. The RTD362, RTD363 are the donor
+ID, the NLS156, NLS160 etc are the sample ID. each sample has data from two lanes L001 and L002 from the sequencer and forward and reverse read (R1 and R2) for each lane, and the samples are from 4 different conditions.
+
+You may get the above information from people who did the experiment, but you can
+also explore it yourself using unix commands:
+
+```
+ls *gz | tr "_" "\t" | cut -f 4,5,6,8 | sort | uniq -c
+   4 RTD362 Condition1  Batch1  NLS156
+   4 RTD362 Condition1  Batch2  NLS158
+   4 RTD362 Condition2  Batch1  NLS157
+   4 RTD362 Condition2  Batch2  NLS159
+   4 RTD362 Condition3  Batch2  NLS160
+   4 RTD362 Condition4  Batch2  NLS161
+   4 RTD363 Condition1  Batch1  NLS162
+   4 RTD363 Condition2  Batch1  NLS163
+```
+
+We first translate (`tr`) the `_` in the filename with a tab, then use the `cut`
+command to cut out the donor ID, condition, batch and sample ID and count how many
+files for each sample. We got 4 files for each sample (2 lanes of R1 and R2 fastq.gz).
+
+### Level 1, do it manually
+
+If you follow the tutorial [https://divingintogeneticsandgenomics.com/post/how-to-use-salmon-alevin-to-preprocess-cite-seq-data/](https://divingintogeneticsandgenomics.com/post/how-to-use-salmon-alevin-to-preprocess-cite-seq-data/)
+you know how to quantify one sample easily.
+
+Let’s do it for NLS156 sample:
+
+```bash
+#this is the full path to the folder containing all your fastq.gz files
+FASTQ_DIR="/path/to/fast/dir"
+
+# assume you already create the slamon index
+IDX_DIR="/path/to/salmon/index"
+
+# where you want the output to be
+OUT_DIR="/path/to/output/dir"
+
+simpleaf quant \
+--reads1 ${FASTQ_DIR}/HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.fastq.gz,\
+         ${FASTQ_DIR}/HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R1_001.fastq.gz \        
+--reads2 ${FASTQ_DIR}/HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R2_001.fastq.gz,\
+         ${FASTQ_DIR}/HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R2_001.fastq.gz \
+--threads 16 \
+--index $IDX_DIR/index \
+--chemistry 10xv2 --resolution cr-like \
+--expected-ori rc --unfiltered-pl \
+--t2g-map $IDX_DIR/index/t2g_3col.tsv \
+--output $OUT_DIR/NLS156_quant
+```
+
+Typing the long fast.gz file name is tedious. Let’s use some unix tricks:
+
+```
+ls *NLS156*R1*
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.fastq.gz
+HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R1_001.fastq.gz
+```
+
+`salmon` needs the R1 fastq.gz files separated by `,`
+
+```bash
+ls *NLS156*R1* | paste -s -d, -
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R1_001.fastq.gz
+
+#we save that into a new variable
+NLS156_R1="$(ls *NLS156*R1* | paste -s -d, -)"
+
+echo $NLS156_R1
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R1_001.fastq.gz
+
+# do the same thing for R2
+NLS156_R2="$(ls *NLS156*R2* | paste -s -d, -)"
+```
+
+The `paste` utility concatenates the corresponding lines of the given input files, replacing all but the last file’s newline characters with a single tab character, and writes the resulting lines to standard output.
+
+To see why we are using `-s` and `-d,` as the argument, see it’s help page by `man`.
+
+`-s` Concatenate all of the lines of each separate input file in command line order. The newline character of every line
+except the last line in each input file is replaced with the tab character, unless otherwise specified by the -d option.
+
+`-d,` instead of using tab, we use `,` to separate.
+
+Now, we can save some typing:
+
+```
+simpleaf quant \
+--reads1 ${FASTQ_DIR}/${NLS156_R1} \        
+--reads2 ${FASTQ_DIR}/${NLS156_R2} \
+--threads 16 \
+--index $IDX_DIR/index \
+--chemistry 10xv2 --resolution cr-like \
+--expected-ori rc --unfiltered-pl \
+--t2g-map $IDX_DIR/index/t2g_3col.tsv \
+--output $OUT_DIR/NLS156_quant
+```
+
+We can do it manually in the same fashion for all 8 samples.
+But it is tedious and easy to make mistakes!
+
+### Level 2, use bash script to automate
+
+We need to prepare a file with each sample per row and three columns.
+column one is the sample ID, column 2 is the R1 reads separated by `,` and column3
+is the R2 reads separated by `,`.
+
+There are many ways to do it. You can use some `awk` tricks, or something like below:
+
+```bash
+# sort to make sure the files are ordered and match. Always double check with your eyes
+ls *L001*R1*gz | sort > L001_R1.tsv
+ls *L001*R2*gz | sort > L001_R2.tsv
+
+ls *L002*R1*gz | sort > L002_R1.tsv
+ls *L002*R2*gz | sort > L002_R2.tsv
+
+# let's see one example
+cat L001_R1.tsv
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S4_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S5_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S6_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S7_L001_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S8_L001_R1_001.fastq.gz
+```
+
+combine the R1 and R2 reads with `,`
+
+```bash
+paste -d, L001_R1.tsv L002_R1.tsv
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S10_L002_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S11_L002_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S4_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S12_L002_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S5_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S13_L002_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S6_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S14_L002_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S7_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S15_L002_R1_001.fastq.gz
+HHYJLDRX3_1_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S8_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S16_L002_R1_001.fastq.gz
+
+# let's do it for both R1 and R2
+
+paste -d, L001_R1.tsv L002_R1.tsv > R1.tsv
+paste -d, L001_R2.tsv L002_R2.tsv > R2.tsv
+
+ls *gz | tr "_" "\t" | cut -f 4,5,6,8 | sort | uniq > meta.tsv
+
+cat meta.tsv
+RTD362  Condition1  Batch1  NLS156
+RTD362  Condition1  Batch2  NLS158
+RTD362  Condition2  Batch1  NLS157
+RTD362  Condition2  Batch2  NLS159
+RTD362  Condition3  Batch2  NLS160
+RTD362  Condition4  Batch2  NLS161
+RTD363  Condition1  Batch1  NLS162
+RTD363  Condition2  Batch1  NLS163
+
+# used the tee command to save it to a file and also print out to the screen
+paste meta.tsv R1.tsv R2.tsv | tee  salmon_fastq.tsv
+
+RTD362  Condition1  NLS156  HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R1_001.fastq.gz   HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R2_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S9_L002_R2_001.fastq.gz
+RTD362  Condition1  NLS158  HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S10_L002_R1_001.fastq.gz  HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_L001_R2_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S10_L002_R2_001.fastq.gz
+RTD362  Condition2  NLS157  HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S11_L002_R1_001.fastq.gz  HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_L001_R2_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S11_L002_R2_001.fastq.gz
+RTD362  Condition2  NLS159  HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S4_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S12_L002_R1_001.fastq.gz  HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S4_L001_R2_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S12_L002_R2_001.fastq.gz
+RTD362  Condition3  NLS160  HHYJLDRX3_1_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S5_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S13_L002_R1_001.fastq.gz  HHYJLDRX3_1_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S5_L001_R2_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S13_L002_R2_001.fastq.gz
+RTD362  Condition4  NLS161  HHYJLDRX3_1_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S6_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S14_L002_R1_001.fastq.gz  HHYJLDRX3_1_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S6_L001_R2_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S14_L002_R2_001.fastq.gz
+RTD363  Condition1  NLS162  HHYJLDRX3_1_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S7_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S15_L002_R1_001.fastq.gz  HHYJLDRX3_1_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S7_L001_R2_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S15_L002_R2_001.fastq.gz
+RTD363  Condition2  NLS163  HHYJLDRX3_1_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S8_L001_R1_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S16_L002_R1_001.fastq.gz  HHYJLDRX3_1_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S8_L001_R2_001.fastq.gz,HHYJLDRX3_2_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S16_L002_R2_001.fastq.gz
+```
+
+With this file, we are ready to loop it over using bash script:
+
+```
+cat salmon_fastq.tsv | while read -r donor condition sample reads1 reads2
+do simpleaf quant \
+--reads1 ${FASTQ_DIR}/${reads1} \
+--reads2 ${FASTQ_DIR}/${reads2} \
+--threads 16 \
+--index $IDX_DIR/index \
+--chemistry 10xv2 --resolution cr-like \
+--expected-ori rc --unfiltered-pl \
+--t2g-map $IDX_DIR/index/t2g_3col.tsv \
+--output $OUT_DIR/${sample}_quant
+done
+```
+
+`while read -r donor condition sample reads1 reads2` will assign each column
+as that variable name, and we use that in the simpleaf quant command.
+
+This script will loop over the `salmon_fastq.tsv` file line by line
+and do `simpleaf quant` for each sample.
+
+Whoop! Thanks for sticking along.
+
+You can also use other more advanced unix tricks such as `xargs` and `GNU parallel`
+to avoid loops. Read my old blog post here [https://crazyhottommy.blogspot.com/2015/09/macs2-parallel-peak-calling.html](https://crazyhottommy.blogspot.com/2015/09/macs2-parallel-peak-calling.html)
+
+### Level 3, write python or R script to execute those commands
+
+I love Unix commands! But when the task becomes a little complicated, turning to a scripting language
+such as `Python` or `R` is better.
+
+I am still faster in `R`, but it is not too difficult to write a python script to
+parse line by line, split by `_` and do some reformatting.
+
+Here is the R solution:
+
+```r
+library(tidyverse)
+
+fq_files<- read_tsv("~/blog_data/files.txt", col_names = FALSE)
+head(fq_files)
+```
+
+```bash
+#> # A tibble: 6 × 1
+#>   X1                                                                            
+#>   <chr>                                                                         
+#> 1 HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R1_001.f…
+#> 2 HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_L001_R2_001.f…
+#> 3 HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_L001_R1_001.f…
+#> 4 HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_L001_R2_001.f…
+#> 5 HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_L001_R1_001.f…
+#> 6 HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_L001_R2_001.f…
+```
+
+```r
+colnames(fq_files)<- "fastq_name"
+
+fq_files<- fq_files %>%
+        tidyr::separate(fastq_name, into =c("flowcell", "lane_id", "date", "donor", 
+                                    "condition", "batch", "experiment", "sample", 
+                                    "sample_id", "lane", "reads",
+                                    "suffix"), sep="_", remove = FALSE) %>%
+        select(donor, condition, batch, sample, lane, reads, fastq_name)
+
+head(fq_files)
+```
+
+```bash
+#> # A tibble: 6 × 7
+#>   donor  condition  batch  sample lane  reads fastq_name                        
+#>   <chr>  <chr>      <chr>  <chr>  <chr> <chr> <chr>                             
+#> 1 RTD362 Condition1 Batch1 NLS156 L001  R1    HHYJLDRX3_1_0427789611_RTD362_Con…
+#> 2 RTD362 Condition1 Batch1 NLS156 L001  R2    HHYJLDRX3_1_0427789611_RTD362_Con…
+#> 3 RTD362 Condition1 Batch2 NLS158 L001  R1    HHYJLDRX3_1_0427789611_RTD362_Con…
+#> 4 RTD362 Condition1 Batch2 NLS158 L001  R2    HHYJLDRX3_1_0427789611_RTD362_Con…
+#> 5 RTD362 Condition2 Batch1 NLS157 L001  R1    HHYJLDRX3_1_0427789611_RTD362_Con…
+#> 6 RTD362 Condition2 Batch1 NLS157 L001  R2    HHYJLDRX3_1_0427789611_RTD362_Con…
+```
+
+```bash
+# some sanity check
+table(fq_files$sample, fq_files$reads)
+```
+
+```bash
+#>         
+#>          R1 R2
+#>   NLS156  2  2
+#>   NLS157  2  2
+#>   NLS158  2  2
+#>   NLS159  2  2
+#>   NLS160  2  2
+#>   NLS161  2  2
+#>   NLS162  2  2
+#>   NLS163  2  2
+```
+
+```r
+fq_nest<- fq_files %>%
+        group_by(sample, reads) %>%
+        nest()
+
+fq_nest$data[[1]]
+```
+
+```bash
+#> # A tibble: 2 × 5
+#>   donor  condition  batch  lane  fastq_name                                     
+#>   <chr>  <chr>      <chr>  <chr> <chr>                                          
+#> 1 RTD362 Condition1 Batch1 L001  HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch…
+#> 2 RTD362 Condition1 Batch1 L002  HHYJLDRX3_2_0427789611_RTD362_Condition1_Batch…
+```
+
+```r
+fq_meta<- fq_nest %>%
+        mutate(fastq_concate = purrr::map_chr(data, ~paste(.x$fastq_name, collapse = ","))) %>%
+        select(-data) %>%
+        tidyr::pivot_wider(names_from = reads, values_from = fastq_concate)
+
+fq_meta
+```
+
+```bash
+#> # A tibble: 8 × 3
+#> # Groups:   sample [8]
+#>   sample R1                                                                R2   
+#>   <chr>  <chr>                                                             <chr>
+#> 1 NLS156 HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch1_5PGEX_NLS156_S1_… HHYJ…
+#> 2 NLS158 HHYJLDRX3_1_0427789611_RTD362_Condition1_Batch2_5PGEX_NLS158_S2_… HHYJ…
+#> 3 NLS157 HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch1_5PGEX_NLS157_S3_… HHYJ…
+#> 4 NLS159 HHYJLDRX3_1_0427789611_RTD362_Condition2_Batch2_5PGEX_NLS159_S4_… HHYJ…
+#> 5 NLS160 HHYJLDRX3_1_0427789611_RTD362_Condition3_Batch2_5PGEX_NLS160_S5_… HHYJ…
+#> 6 NLS161 HHYJLDRX3_1_0427789611_RTD362_Condition4_Batch2_5PGEX_NLS161_S6_… HHYJ…
+#> 7 NLS162 HHYJLDRX3_1_0427789611_RTD363_Condition1_Batch1_5PGEX_NLS162_S7_… HHYJ…
+#> 8 NLS163 HHYJLDRX3_1_0427789611_RTD363_Condition2_Batch1_5PGEX_NLS163_S8_… HHYJ…
+```
+
+```bash
+#View(fq_meta)
+```
+
+Double check with your eyes to make sure the fastq files are in the right order and belong to the right sample!
+This is the same file as we generated with the unix commands but now with a header.
+
+Now let’s create the shell command within R and call it within R:
+
+```r
+#this is the full path to the folder containing all your fastq.gz files
+FASTQ_DIR<- "/path/to/fast/dir"
+
+# assume you already create the slamon index
+IDX_DIR<- "/path/to/salmon/index"
+
+# where you want the output to be
+OUT_DIR<- "/path/to/output/dir"
+
+for ( i in seq_along(1:nrow(fq_meta))){
+
+        sample = fq_meta[i, 1, drop = TRUE]
+        reads1 = fq_meta[i, 2, drop=TRUE]
+        reads2 = fq_meta[i, 3, drop = TRUE]
+        
+        full_cmd <- sprintf("simpleaf quant \\
+                --reads1 %s/%s \\
+                --reads2 %s/%s \\
+                --threads 16 \\
+                --index %s/index \\
+                --chemistry 10xv2 --resolution cr-like \\
+                --expected-ori rc --unfiltered-pl \\
+                --t2g-map %s/index/t2g_3col.tsv \\
+                --output %s/%s_quant", 
+                FASTQ_DIR, reads1, 
+                FASTQ_DIR, reads2, 
+                IDX_DIR, 
+                IDX_DIR, 
+                OUT_DIR, sample)
+        cat(full_cmd)
+        ## run it in shell
+        #system(full_command)
+}
+```
+
+### Level 4, run it in a HPC cluster
+
+okay, okay, I have showed you how to run it directly on terminal interactively. But many times the
+tasks are memory intensive, and you can not run it locally or you are not allowed to run it on a
+high performance computing cluster interactively.
+
+You need to submit the jobs to a scheduler such as `slurm`.
+
+![image](https://divingintogeneticsandgenomics.com/img/hpcscheduler.png)
+
+Different schedulers use different command to submit jobs:
+
+- PBS uses `qsub`.
+
+- Slurm uses `sbatch`.
+
+- LSF uses `bsub`.
+
+- SGE uses `qsub`.
+
+I have used `PBS`, `SLURM` and `LSF` in my old days at the University of Florida,
+MD Anderson Cancer Center, Harvard and Dana-Farber.
+
+You can use this little python package called `slurmpy` [https://github.com/crazyhottommy/slurmpy](https://github.com/crazyhottommy/slurmpy)
+for `SLURM`.
+
+Below is python code:
+
+```python
+from slurmpy import Slurm
+
+FASTQ_DIR="/path/to/fast/dir"
+
+# assume you already create the slamon index
+IDX_DIR="/path/to/salmon/index"
+
+# where you want the output to be
+OUT_DIR="/path/to/output/dir"
+
+# you can change wall time and others 
+s = Slurm("job-name", {"time": "04:00:00", "partition": "shared"})
+
+print(str(s))
+#!/bin/bash
+
+#SBATCH -e logs/job-name.%J.err
+#SBATCH -o logs/job-name.%J.out
+#SBATCH -J job-name
+
+#SBATCH --time=04:00:00
+#SBATCH --partition=shared
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -p general
+#SBATCH --mem=4000
+
+set -eo pipefail -o nounset
+
+__script__
+
+with open("salmon_fastq.tsv", "r") as f:
+        for line in f:
+                fields = line.split("\t")
+                sample = fields[2]
+                reads1= fields[3]
+                reads2 = fields[4]
+                print("""
+                simpleaf quant \
+                --reads1 {FASTQ_DIR}/{reads1} \
+                --reads2 {FASTQ_DIR}/{reads2} \
+                --threads 16 \
+                --index {IDX_DIR}/index \
+                --chemistry 10xv2 --resolution cr-like \
+                --expected-ori rc --unfiltered-pl \
+                --t2g-map {IDX_DIR}/index/t2g_3col.tsv \
+                --output {OUT_DIR}/{sample}_quant
+                """.format(FASTQ_DIR = FASTQ_DIR, IDX_DIR = IDX_DIR, OUT_DIR=OUT_DIR, reads1=reads1, reads2=reads2, sample=sample))
+
+# after you check the commands print out correctly, you can submit it to slurm by
+# using s.run()
+
+with open("salmon_fastq.tsv", "r") as f:
+        for line in f:
+                fields = line.split("\t")
+                sample = fields[2]
+                reads1= fields[3]
+                reads2 = fields[4]
+                s.run("""
+                simpleaf quant \
+                --reads1 {FASTQ_DIR}/{reads1} \
+                --reads2 {FASTQ_DIR}/{reads2} \
+                --threads 16 \
+                --index {IDX_DIR}/index \
+                --chemistry 10xv2 --resolution cr-like \
+                --expected-ori rc --unfiltered-pl \
+                --t2g-map {IDX_DIR}/index/t2g_3col.tsv \
+                --output {OUT_DIR}/{sample}_quant
+                """.format(FASTQ_DIR = FASTQ_DIR, IDX_DIR = IDX_DIR, OUT_DIR=OUT_DIR, reads1=reads1, reads2=reads2, sample=sample))
+```
+
+or if you want to stay in R and happens to use `LSF`, take a look at [https://github.com/jokergoo/bsub](https://github.com/jokergoo/bsub).
+
+### Level 5, run it with a workflow language
+
+Lastly, if you need to run the same commands for hundreds of samples, you want to write a [`Snakemake`](https://snakemake.github.io/) or [`nextflow`](https://www.nextflow.io/) pipeline.
+
+It requires another full blog post on `Snakemake`, but take a look at some pipelines I wrote:
+[https://divingintogeneticsandgenomics.com/project/snakemake-pipelines/](https://divingintogeneticsandgenomics.com/project/snakemake-pipelines/)
+
+For beginners, I highly recommend this tutorial by Titus Brown! [https://ngs-docs.github.io/2023-snakemake-book-draft/intro.html](https://ngs-docs.github.io/2023-snakemake-book-draft/intro.html)
+
+- 
+
+Note 1, do not reinvent the wheel, there are written workflows for single-cell processing
+
+```
+  - https://nf-co.re/scrnaseq/2.5.1
+  - https://github.com/snakemake-workflows/single-cell-rna-seq
+```
+
+- 
+
+Note 2, you do not always need a workflow if you are not running it for tens of hundreds of samples.
+
+Happy Learning!
+
+**PS: If you like this post, you may find my book [`From Cell Line to Command Line`](https://divingintogeneticsandgenomics.ck.page/products/cell-line-to-command-line) helpful for you.**

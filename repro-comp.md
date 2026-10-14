@@ -1,0 +1,190 @@
+# Reproducible Computing in Bioinformatics: Lessons from My Latest Talk
+
+- **Author:** Ming Tommy Tang
+- **Date:** Aug 18, 2025
+- **Tags:** bioinformatics, data analysis, reproducible
+- **Source:** [https://divingintogeneticsandgenomics.com/post/repro-comp/](https://divingintogeneticsandgenomics.com/post/repro-comp/)
+
+---
+
+Hey everyone, it’s Tommy here. If you’ve been following my blog or my Twitter/X (@tangming2005), you know I love diving into the practical side of bioinformatics and genomics.
+
+Recently, I gave a talk titled [“Good Enough Practices for Reproducible Computing”](https://divingintogeneticsandgenomics.com/talk/2025-moderna-reproducible/) at Moderna, where I spent a good chunk of time chatting about reproducible computing.
+
+Why? Because in our field, where data is exploding and analyses get complex, making sure your work can be repeated—by you or anyone else—is a game-changer. I thought it’d be fun to turn those slides into a blog post here.
+
+In this post, I’ll focus on the reproducible computing part, sharing why it matters, why it’s tricky, and some simple tips to make it happen. I’ll keep it straightforward, like I do in my other posts—no fancy jargon without explanation. Let’s jump in!
+
+## Why Bother with Reproducibility?
+
+First off, remember that story from Keith Baggerly at MD Anderson? He uncovered issues in high-throughput biology papers because methods weren’t clear or reproducible. Check out his hilarious YouTube talk on it: [The Importance of Reproducible Research in High-Throughput Biology](https://www.youtube.com/watch?v=7gYIs7uYbMo).
+
+Stuff like that shows how non-reproducible work can lead to wrong conclusions, wasted time, and even bad decisions in drug development—which can be super expensive.
+
+But here’s a personal angle: **Your closest collaborator is yourself six months from now**. I’ve been there—digging up an old analysis and thinking, “What the heck did I do here?”
+
+If it’s not reproducible, you’re starting from scratch. And in biotech/pharama, where I’m now Director of Bioinformatics at AstraZeneca, we can’t afford that. Reproducibility saves time, builds trust, lets others build on your work and most importantly, it saves lives.
+
+[Titus Brown](https://ccah.vetmed.ucdavis.edu/areas-study/genetics/titus-brown-lab) summed it up nicely in one of his talks: Reproducibility isn’t just nice; it’s essential in computational biology.
+
+## The Challenges: Why Is It So Hard?
+
+From my experience (and the gaps in my own career journey from wet lab to comp bio), here are the big hurdles:
+
+- **Data and Scripts Go Missing**: Raw data isn’t versioned, or scripts are “available upon request” (yeah, right).
+
+- **Vague Methods**: Papers skip details on tools, versions, or even operating systems.
+
+- **Version Mismatches**: Different R/Python packages, bioinformatics tools, or OS (Mac vs. Linux vs. Windows) can change results.
+
+- **No Standards**: Everyone organizes projects differently, making collaboration a nightmare.
+
+I’ve seen this in my over a decade long career in bioiinformatics. One mismatch, and poof—results don’t match.
+
+## How to Make Your Work Reproducible: Practical Tips
+
+The good news? You don’t need rocket science. Here’s what I covered in the talk—simple steps:
+
+1. 
+
+**Version Your Data and Files Smartly**
+
+Version control large files with [git lfs](https://git-lfs.com/).
+
+Name files like a pro: Use ISO 8601 dates (YYYY-MM-DD), no spaces or special chars, and add slugs for clarity. For example, “2025-08-17_reproducible-analysis_results.csv” beats “final_v2.csv”.
+
+Shoutout to Jenny Bryan for her awesome slides on this: [Naming Things](http://www2.stat.duke.edu/~rcs46/lectures_2015/01-markdown-git/slides/naming-slides/naming-slides.pdf).
+
+Organize projects consistently: Folders like /data (read-only), /scripts, /results. In R, use `here::here()` for paths—avoids headaches. Python folks, check out [pyhere](https://pypi.org/project/pyhere/) on GitHub.
+
+2. 
+
+**Git for Code Versioning**
+Git is your best friend for tracking changes. I commit often and push daily. Basic commands: `git init`, `git add`, `git commit`, `git push`.
+
+It saved me when inheriting projects at Immunitas Therapeutics (after people left). If you’re new, try [Happy Git with R](https://happygitwithr.com) or [Learn Git Branching](https://learngitbranching.js.org).
+
+Pro tip: Use branches for experiments you might toss.
+
+3. 
+
+**Manage Environments with Tools Like Conda, uv, or renv**
+Pin package versions! For Python, I love mamba (faster Conda) or uv (super quick, check it out on GitHub: [https://github.com/astral-sh/uv](https://github.com/astral-sh/uv)).
+
+In R, renv snapshots your library: `renv::init()`, `renv::snapshot()`. No more “It works on my machine” excuses.
+
+4. 
+
+**Containers for the Win: Docker or Singularity**
+Think of Docker as a virtual machine that bundles everything—OS, packages, code. I’ve used it for ChIP-seq pipelines.
+Resources:
+
+  - 
+
+[Rocker Project](https://rocker-project.org) for R in Docker,
+
+  - 
+
+[BioContainers](https://biocontainers.pro/) for bio tools.
+
+  - 
+
+[Bioconductor container](https://www.bioconductor.org/help/docker/)
+
+5. 
+
+**Literate Programming: Mix Code and Words**
+Use Jupyter Notebooks for Python or R Markdown/Quarto for R. I will need to switch to Quarto—it’s next-gen R Markdown ([https://quarto.org](https://quarto.org)). Embed code chunks, explanations, and outputs.
+
+Bonus: Quarto is Git-friendly. Document outside too, like in my enhancer-promoter repo: [https://gitlab.com/tangming2005/Enhancer_promoter_interaction_data](https://gitlab.com/tangming2005/Enhancer_promoter_interaction_data).
+
+Python users want to take a look at [marimo](https://marimo.io/) as a Jupyter alternative
+
+6. 
+
+**Automate Everything**
+Scripts over manual tweaks! For repetitive tasks, bash scripts or workflows like Snakemake/Nextflow. In R, {targets} is gold (book: [https://books.ropensci.org/targets/](https://books.ropensci.org/targets/)).
+Automation = best documentation. Computers love boring work; let them handle it.
+
+7. 
+
+**Clean Code with Functions**
+Don’t repeat yourself—use functions. In R, purrr::map() for loops. I even ask ChatGPT to refactor messy code. For bigger stuff, build packages with roxygen2 (book: [https://r-pkgs.org](https://r-pkgs.org)).
+
+Functional programming keeps things tidy and reusable.
+
+## Good Enough Practices to Get Started
+
+You don’t need perfection. Start with:
+
+- Consistent folders.
+
+- Notebooks for analyses.
+
+- Extensive documentation.
+
+- Git for versioning.
+
+- A quick HTML report with knitr.
+
+- End every project with a slide deck linking to your GitHub.
+
+Over time, aim for the full spectrum: Reproduce your own work anytime, anywhere, and let others do the same.
+
+### Tools that are useful
+
+1. 
+
+[SciDataFlow](https://github.com/vsbuffalo/scidataflow) — Facilitating the Flow of Data in Science. By Vince Buffalo, author of [Bioinformatics data skills](https://www.amazon.com/Bioinformatics-Data-Skills-Reproducible-Research/dp/1449367372) (one my favorite books).
+
+2. 
+
+[pracpac](https://arxiv.org/abs/2303.07876): Practical R Packaging with Docker. By [Stephen Turner](https://stephenturner.us/).
+
+3. 
+
+[rix](https://docs.ropensci.org/rix/): Reproducible Environments with [Nix](https://nixos.org/).
+
+4. 
+
+[DataLad for reproducible machine-learning analyses](https://handbook.datalad.org/en/latest/usecases/ml-analysis.html)
+
+5. 
+
+[Shournal](https://github.com/tycho-kirchner/shournal) A (file-) journal for your shell.
+
+6. 
+
+I do not want to write down every linux commands in the terminal anymore. Check out [Shell Sync](https://www.liminalbios.com/)
+
+7. 
+
+[Script of Scripts (SoS)](https://vatlab.github.io/sos-docs/index.html) is a computational environment for the development and execution of scripts in multiple languages for daily computational research. It can be used to develop scripts to analyze data interactively in a Jupyter environment, and, with minimal effort, convert the scripts to a workflow that analyzes a large amount of data in batch mode.
+
+8. 
+
+[DSO](https://github.com/Boehringer-Ingelheim/dso): is a command line helper for building reproducible data anlaysis projects with ease from Boehringer-Ingelheim.
+
+9. 
+
+Imagine being able to click on a plot and seeing the complete Jupyter/Rmd notebook, data, and parameters. That’s [GoFigr](https://www.gofigr.io/)!
+
+### Two books I have read
+
+- 
+
+[Building reproducible analytical pipelines with R](https://raps-with-r.dev/). Highly recommend if you use R.
+
+- 
+
+[Software Engineering for Data Scientists: From Notebooks to Scalable Systems](https://www.amazon.com/Software-Engineering-Data-Scientists-Notebooks/dp/1098136209) if you use python. But the concepts are applicable no matter what language you use.
+
+## Wrapping Up
+
+Reproducible computing transformed my career—from PhD at UF to leading teams now. It avoids errors, speeds things up, and makes you a better scientist.
+
+If you’re in bioinformatics, embrace it! Got questions? Hit me up on Twitter or in the comments below. And if you like this, subscribe to my newsletter for more tips: [https://divingintogeneticsandgenomics.ck.page/profile](https://divingintogeneticsandgenomics.ck.page/profile).
+
+What do you think— what’s your biggest reproducibility headache? Let’s chat!
+
+(Oh, and if you’re into videos, check my YouTube channel [Chatomics](https://www.youtube.com/@chatomics) for related tutorials.)
