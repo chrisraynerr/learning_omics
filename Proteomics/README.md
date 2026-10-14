@@ -64,7 +64,7 @@ To reflect modern proteomics without confusing fundamentally different data stru
 - **[05. Part 3a: Olink Proximity Extension Assay: QC, Normalization, and OlinkAnalyze](05_part-3a-olink-qc-npx-normalization-and-olinkanalyze.md)**
   - Understanding NPX ($\log_2$ scale), internal controls, and assay warning flags.
   - Plate bridging normalization across cohorts.
-- **[Hands-On Workbook: Plasma Proteomics Paired QC & Analysis Notebook](05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd)** (`.Rmd` & [`.ipynb`](05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb))
+- **[Hands-On Workbook: Plasma Proteomics Paired QC & Analysis Notebook](05b_olink_plasma_paired_qc_and_analysis_notebook.md)** (Online Guide, [`.Rmd`](05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd) & [`.ipynb`](05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb))
   - Complete executable walkthrough on a paired pre/post-treatment clinical cohort ($N = 60$ samples across 2 plates with bridge controls).
   - Step-by-step QC diagnostics: Spiked internal controls ($\pm 0.3$ NPX deviation), LOD detectability ($50\%$ threshold), and multi-plate bridging.
   - Statistical testing: Paired Student's t-test and Linear Mixed-Effects Models (`lme4::lmer`), volcano plots, and matched patient trajectory spaghetti plots.

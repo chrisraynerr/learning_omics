@@ -47,3 +47,4 @@ Try answering the following questions using the interactive controls in the dash
 1. Switch to **Tab 4 (Patient Trajectories)**.
 2. Select **IL-6** and **CXCL10**, and compare them to **FGF21**.
    * *Question:* How do individual patient slopes confirm that the decrease in IL-6 and CXCL10 is a true class effect rather than driven by a single extreme outlier?
+

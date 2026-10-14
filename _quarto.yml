@@ -4,8 +4,18 @@ project:
   resources:
     - "interactive/olink_explore_interactive_qc_analysis.html"
     - "Proteomics/data/*"
+    - "Proteomics/*.Rmd"
+    - "Proteomics/*.ipynb"
+  render:
+    - "*.md"
+    - "Proteomics/*.md"
+    - "BulkRNAseq/*.md"
+    - "scRNAseq/*.md"
+    - "scATACseq/*.md"
+    - "interactive/*.md"
 
 execute:
+  eval: false
   freeze: auto
 
 website:
@@ -40,7 +50,7 @@ website:
           - text: "Part 3a: Olink PEA QC & Normalization"
             href: Proteomics/05_part-3a-olink-qc-npx-normalization-and-olinkanalyze.md
           - text: "Hands-On Workbook: Real Explore HT QC & Paired Analysis"
-            href: Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd
+            href: Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.md
           - text: "Recommended Reading & Curated Anthologies"
             href: Proteomics/RECOMMENDED_READING.md
       - text: "🔬 Interactive Lab"
@@ -70,7 +80,7 @@ website:
             - text: "Part 3a: Olink QC & OlinkAnalyze"
               href: Proteomics/05_part-3a-olink-qc-npx-normalization-and-olinkanalyze.md
             - text: "Workbook: Real Explore HT Paired QC & Analysis"
-              href: Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd
+              href: Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.md
             - text: "Part 3b: SomaScan .adat & ANML Normalization"
               href: Proteomics/06_part-3b-somascan-adat-qc-anml-and-somadataio.md
             - text: "Part 3c: Affinity DAPs & LOD Handling"

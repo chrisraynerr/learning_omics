@@ -91,7 +91,7 @@ Continuous relative quantification, mass spec deconvolution, and affinity arrays
 Run real clinical analyses directly in your browser or through executable notebooks.
 * **Virtual Olink QC Lab**: Live sliders, internal control scatterplots, plate bridge normalization toggles, and patient trajectory inspectors.
 * **Executable Workbooks**: Download and run our end-to-end R Markdown (`.Rmd`) and Jupyter notebook (`.ipynb`) workflows with zero configuration.
-* **Launch**: [Open Interactive Lab](interactive/olink_qc_lab.md) | [Hands-On Explore HT Workbook](Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd)
+* **Launch**: [Open Interactive Lab](interactive/olink_qc_lab.md) | [Hands-On Explore HT Workbook](Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.md)
 :::
 :::
 :::
@@ -117,11 +117,12 @@ Each module in this curriculum is backed by a structured reading list integratin
 
 1. **Clone or Fork the Repository**:
    ```bash
-   git clone https://github.com/<your-username>/learning_omics.git
+   git clone https://github.com/chrisraynerr/learning_omics.git
    cd learning_omics
    ```
-2. **Open in RStudio or VS Code**:
-   * Navigate to `Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd` to run the paired clinical trial workflow.
+2. **Explore the Curriculum & Workbooks**:
+   * Visit the online interactive guide at [Hands-On Explore HT Workbook](Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.md) or download the executable `.Rmd` / `.ipynb` notebooks.
    * Or open `interactive/olink_explore_interactive_qc_analysis.html` in any web browser for instant, offline visual exploration.
 3. **Contribute & Feedback**:
    * All chapters are written in GitHub Flavored Markdown and R Markdown. Contributions, bug reports, and dataset suggestions are welcomed via GitHub Pull Requests.
+
