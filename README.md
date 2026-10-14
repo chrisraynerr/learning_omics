@@ -1,6 +1,6 @@
 # 🧬 Learning Omics: Computational Biology & Proteomics Curriculum
 
-[![Website](https://img.shields.io/badge/Website-GitHub%20Pages-blue.svg)](https://your-username.github.io/learning_omics/)
+[![Website](https://img.shields.io/badge/Website-GitHub%20Pages-blue.svg)](https://chrisraynerr.github.io/learning_omics/)
 [![Quarto](https://img.shields.io/badge/Powered%20by-Quarto-447099.svg)](https://quarto.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
@@ -65,7 +65,7 @@ git commit -m "feat: complete Learning Omics curriculum with interactive lab & w
 Create a new public repository named `learning_omics` on GitHub, then push:
 ```bash
 git branch -M main
-git remote add origin https://github.com/<your-username>/learning_omics.git
+git remote add origin https://github.com/chrisraynerr/learning_omics.git
 git push -u origin main
 ```
 
@@ -95,3 +95,4 @@ quarto render
 ## 📄 License & Attribution
 
 All instructional materials and code in this repository are open access under the MIT License. Data from **PRIDE PAD000062** is shared under the Creative Commons Public Domain (CC0) license courtesy of Dr. Joaquin M. Espinosa and the Linda Crnic Institute for Down Syndrome.
+

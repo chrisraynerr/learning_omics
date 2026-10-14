@@ -11,8 +11,8 @@ execute:
 website:
   title: "Learning Omics"
   description: "A Hands-On Curriculum for Computational Biology, Single-Cell Genomics & Proteomics"
-  site-url: "https://your-username.github.io/learning_omics/"
-  repo-url: "https://github.com/your-username/learning_omics"
+  site-url: "https://chrisraynerr.github.io/learning_omics/"
+  repo-url: "https://github.com/chrisraynerr/learning_omics"
   repo-actions: [issue]
   
   navbar:
