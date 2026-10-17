@@ -31,7 +31,14 @@ jobs:
 
       - name: Render Quarto Project
         run: |
-          quarto render --verbose
+          set +e
+          quarto render --verbose 2>&1 | tee quarto_output.log
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "### Quarto Render Log" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat quarto_output.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          exit $EXIT_CODE
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -4,17 +4,15 @@ project:
   resources:
     - "interactive/olink_explore_interactive_qc_analysis.html"
     - "Proteomics/data/"
-    - "Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd"
-    - "Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb"
+    - "Proteomics/_05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd"
+    - "Proteomics/_05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb"
   render:
-    - "index.md"
-    - "interactive/*.md"
-    - "BulkRNAseq/*.md"
-    - "scRNAseq/*.md"
-    - "scATACseq/*.md"
-    - "Proteomics/*.md"
-    - "!Proteomics/*.Rmd"
-    - "!Proteomics/*.ipynb"
+    - index.md
+    - interactive/olink_qc_lab.md
+    - BulkRNAseq/
+    - scRNAseq/
+    - scATACseq/
+    - Proteomics/
 
 execute:
   eval: false

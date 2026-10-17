@@ -17,8 +17,8 @@ output:
 ::: {.callout-tip}
 ## Hands-On Interactive Lab & Downloadable Notebooks
 * **🔬 Run Live in Browser**: Explore the [Interactive Olink QC Lab](../interactive/olink_qc_lab.md) for live LOD thresholding, control drift analysis, and paired volcano plots.
-* **📥 Download R Markdown Source**: [`05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd`](https://raw.githubusercontent.com/chrisraynerr/learning_omics/main/Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd)
-* **📥 Download Jupyter Notebook**: [`05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb`](https://raw.githubusercontent.com/chrisraynerr/learning_omics/main/Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb)
+* **📥 Download R Markdown Source**: [`_05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd`](https://raw.githubusercontent.com/chrisraynerr/learning_omics/main/Proteomics/_05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd)
+* **📥 Download Jupyter Notebook**: [`_05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb`](https://raw.githubusercontent.com/chrisraynerr/learning_omics/main/Proteomics/_05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb)
 * **📊 Metadata & Plate Map**: [`PAD000062_mapping.csv`](https://raw.githubusercontent.com/chrisraynerr/learning_omics/main/Proteomics/data/PAD000062_mapping.csv)
 :::
 
