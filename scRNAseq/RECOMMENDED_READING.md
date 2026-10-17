@@ -151,3 +151,4 @@ This reading curriculum accompanies the **Single-Cell RNA-seq (scRNA-seq) Tutori
 | **17: scPlotter Visualizations** | Wickham, 2016 (*ggplot2 book*) | ComplexHeatmap & scPlotter |
 | **18: decoupleR & CollecTRI** | Badia-i-Mompel et al., 2022 (*Bioinformatics*) | decoupleR / CollecTRI |
 | **19: decoupleR & PROGENy** | Schubert et al., 2018 (*Nat Commun*) | PROGENy pathway footprints |
+

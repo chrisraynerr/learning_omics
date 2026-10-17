@@ -3,16 +3,18 @@ project:
   output-dir: _site
   resources:
     - "interactive/olink_explore_interactive_qc_analysis.html"
-    - "Proteomics/data/*"
-    - "Proteomics/*.Rmd"
-    - "Proteomics/*.ipynb"
+    - "Proteomics/data/"
+    - "Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.Rmd"
+    - "Proteomics/05b_olink_plasma_paired_qc_and_analysis_notebook.ipynb"
   render:
-    - "*.md"
-    - "Proteomics/*.md"
+    - "index.md"
+    - "interactive/*.md"
     - "BulkRNAseq/*.md"
     - "scRNAseq/*.md"
     - "scATACseq/*.md"
-    - "interactive/*.md"
+    - "Proteomics/*.md"
+    - "!Proteomics/*.Rmd"
+    - "!Proteomics/*.ipynb"
 
 execute:
   eval: false
@@ -44,7 +46,7 @@ website:
       - text: "Proteomics"
         menu:
           - text: "Proteomics Curriculum Overview"
-            href: Proteomics/README.md
+            href: Proteomics/index.md
           - text: "Part 1: The Proteomics Landscape (MS vs Olink vs SomaScan)"
             href: Proteomics/01_part-1-the-proteomics-landscape-ms-vs-olink-vs-somascan.md
           - text: "Part 3a: Olink PEA QC & Normalization"
@@ -62,7 +64,7 @@ website:
       style: "docked"
       contents:
         - text: "Overview & Index"
-          href: Proteomics/README.md
+          href: Proteomics/index.md
         - section: "Foundations"
           contents:
             - text: "Part 1: Landscape (MS vs Olink vs SomaScan)"

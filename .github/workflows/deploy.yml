@@ -30,7 +30,8 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Render Quarto Project
-        uses: quarto-dev/quarto-actions/render@v2
+        run: |
+          quarto render --verbose
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -99,3 +99,4 @@ This reading curriculum accompanies the **Single-Cell ATAC-seq (scATAC-seq) Tuto
 | **03: Integration & Clustering** | Cusanovich et al., 2018 / Korsunsky et al., 2019 | TF-IDF, SVD & Harmony |
 | **04: Cell Type Identification** | Schep et al., 2017 / Stuart et al., 2021 | GeneActivity & chromVAR |
 | **05: Differential Accessibility** | Squair et al., 2021 / Granja et al., 2021 | Pseudo-bulk DA & Limma-voom |
+
